@@ -1,20 +1,22 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 
 @Table({
-  tableName: "poligono",
+  tableName: "codigo_postal",
   underscored: true,
   timestamps: true,
-  updatedAt: false
+  updatedAt: false,
+  paranoid: true
 })
-export class Poligono extends Model<Poligono> {
+export class CodigoPostal extends Model<CodigoPostal> {
   @Column({
     type: DataType.INTEGER({ unsigned: true }),
-    primaryKey: true
+    primaryKey: true,
+    allowNull: false
   })
   id: number;
 
   @Column({
-    type: DataType.GEOGRAPHY({ type: 'POLYGON' }),
+    type: 'POLYGON',
     allowNull: false
   })
   poligono: string

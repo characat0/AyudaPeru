@@ -1,4 +1,5 @@
 import { dialect } from "./constants";
+export const PORT: number = parseInt(process.env.PORT);
 
 export const databaseConfig = {
   database: process.env.DATABASE_NAME,

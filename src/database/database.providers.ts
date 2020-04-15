@@ -1,12 +1,12 @@
 import { Sequelize } from "sequelize-typescript";
 import { sequelizeToken } from "../constants";
 import { databaseConfig } from "../config";
-import { Poligono } from './schema/Poligono';
+import { CodigoPostal } from './schema/CodigoPostal';
 
 
 const sequelize = new Sequelize(databaseConfig);
 sequelize.addModels([
-  Poligono
+  CodigoPostal
 ]);
 
 export const databaseProviders = [

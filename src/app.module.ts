@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PoligonoController } from './api/poligono/poligono.controller';
-import { PoligonoService } from './api/poligono/poligono.service';
 import { DatabaseModule } from './database/database.module';
+import { CodigoPostalService } from './api/codigo-postal/codigo-postal.service';
+import { CodigoPostalController } from './api/codigo-postal/codigo-postal.controller';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [AppController, PoligonoController],
-  providers: [AppService, PoligonoService],
+  controllers: [AppController, CodigoPostalController],
+  providers: [AppService, CodigoPostalService],
 })
 export class AppModule {}
