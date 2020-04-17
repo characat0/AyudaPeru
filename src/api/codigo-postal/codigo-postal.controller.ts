@@ -58,6 +58,7 @@ export class CodigoPostalController {
     const { longitud, latitud } = body;
     try {
       const codigo: object = (await this.codigoPostalService.findCodigoPostal(parseFloat(longitud), parseFloat(latitud)))[0];
+      if (!codigo) throw new Error("Codigo postal no encontrado");
       return res.status(200).json(codigo);
     } catch (e) {
       return res.status(400).send(e.message)
