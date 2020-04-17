@@ -35,10 +35,12 @@ export class CodigoPostalService {
   async findCodigoPostal(longitud: number, latitud: number): Promise<any> {
     if (typeof longitud !== 'number' || typeof latitud !== 'number')
       throw new Error("Longitud y latitud deben ser numeros");
-    return this.sequelize.query(`SET @point=ST_POINTFROMTEXT('POINT(? ?)')`,
-      { replacements: [longitud, latitud] }
+    return this.sequelize.transaction(transaction => {
+      return this.sequelize.query(`SET @point=ST_POINTFROMTEXT('POINT(? ?)')`,
+        { replacements: [longitud, latitud], transaction }
       ).then(() => this.sequelize.query(`SELECT id FROM codigo_postal WHERE ST_WITHIN(@point, codigo_postal.poligono)`,
-      { type: QueryTypes.SELECT }));
+        { type: QueryTypes.SELECT, transaction }));
+    })
   }
 
   async deleteCodigoPostal(id: number): Promise<number> {
