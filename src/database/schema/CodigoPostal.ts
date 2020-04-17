@@ -21,3 +21,9 @@ export class CodigoPostal extends Model<CodigoPostal> {
   })
   poligono: string
 }
+CodigoPostal.prototype.toJSON = function() {
+  return {
+    id: this.get('id'),
+    poligono: this.get('poligono')
+  }
+}

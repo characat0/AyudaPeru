@@ -12,7 +12,8 @@ export class CodigoPostalService {
   }
 
   async findPoligonoById(id: number): Promise<object> {
-    return CodigoPostal.findByPk(id, { raw: true, rejectOnEmpty: true });
+    return CodigoPostal.findByPk(id, { rejectOnEmpty: true })
+      .then(codigo => codigo.toJSON());
   }
 
   async updateCodigoPostal(codigoPostal: number, geometria: string): Promise<any> {
