@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
 import { CodigoPostalService } from './codigo-postal.service';
 import { Response } from 'express';
+import { stringify } from 'wkt';
 
 @Controller('postcodes')
 export class CodigoPostalController {
@@ -14,8 +15,15 @@ export class CodigoPostalController {
   @Get(':id')
   async findCodigoPostalById(@Param('id') id: string, @Res() res: Response): Promise<Response> {
     try {
-      const codigo:object = await this.codigoPostalService.findPoligonoById(parseInt(id));
-      return res.json(codigo);
+      const codigo: { id: number, poligono: object } = await this.codigoPostalService.findPoligonoById(parseInt(id));
+      const response = {
+        type: "Feature",
+        geometry: codigo.poligono,
+        properties: {
+          code: codigo.id
+        }
+      }
+      return res.json(response);
     } catch (e) {
       return res.status(404).send(e.message);
     }
@@ -23,11 +31,14 @@ export class CodigoPostalController {
 
   @Put(':id')
   async modifyCodigoPostal(@Param('id') id: string, @Body() body, @Res() res: Response): Promise<Response> {
-    const { geometria } = body;
+    let { geometria } = body;
     if (!geometria) {
       return res.status(400).send('Property geometria is not defined.');
     }
     try {
+      if (typeof geometria === 'object') {
+        geometria = stringify(geometria);
+      }
       const results: number[] = await this.codigoPostalService.updateCodigoPostal(parseInt(id), geometria);
       if (results[1] > 0) {
         return res.status(204).send();
@@ -44,8 +55,11 @@ export class CodigoPostalController {
 
   @Post()
   async createCodigoPostal(@Body() body, @Res() res: Response): Promise<Response> {
-    const { id, geometria } = body;
+    let { id, geometria } = body;
     try {
+      if (typeof geometria === 'object') {
+        geometria = stringify(geometria);
+      }
       await this.codigoPostalService.createCodigoPostal(parseInt(id), geometria);
       return res.status(201).send();
     } catch (e) {
@@ -58,7 +72,9 @@ export class CodigoPostalController {
     const { longitud, latitud } = body;
     try {
       const codigo: object = (await this.codigoPostalService.findCodigoPostal(parseFloat(longitud), parseFloat(latitud)))[0];
-      if (!codigo) throw new Error("Codigo postal no encontrado");
+      if (!codigo) {
+        return res.status(400).send("Codigo postal no encontrado");
+      }
       return res.status(200).json(codigo);
     } catch (e) {
       return res.status(400).send(e.message)

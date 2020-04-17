@@ -8,6 +8,12 @@ import { Table, Column, Model, DataType } from 'sequelize-typescript';
   paranoid: true
 })
 export class CodigoPostal extends Model<CodigoPostal> {
+  toJSON(): {id:number, poligono:object}{
+    return {
+      id: this.get('id'),
+      poligono: this.get('poligono')
+    }
+  }
   @Column({
     type: DataType.INTEGER({ unsigned: true }),
     primaryKey: true,
@@ -19,11 +25,6 @@ export class CodigoPostal extends Model<CodigoPostal> {
     type: 'POLYGON',
     allowNull: false
   })
-  poligono: string
+  poligono: object
 }
-CodigoPostal.prototype.toJSON = function() {
-  return {
-    id: this.get('id'),
-    poligono: this.get('poligono')
-  }
-}
+
