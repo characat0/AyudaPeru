@@ -8,7 +8,7 @@ import { QueryTypes } from 'sequelize';
 export class CodigoPostalService {
   constructor(@Inject(sequelizeToken) private readonly sequelize: Sequelize) {}
   async findAll(): Promise<number[]> {
-    return CodigoPostal.findAll().map(codigo => codigo.get('id'));
+    return CodigoPostal.findAll({ attributes: ['id'], raw: true }).map(codigo => codigo.get('id'));
   }
 
   async findPoligonoById(id: number): Promise<{id: number, poligono:object}> {
