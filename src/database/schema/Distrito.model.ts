@@ -1,19 +1,14 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 
 @Table({
-  tableName: "codigo_postal",
+  tableName: "distrito",
   underscored: true,
   timestamps: true,
   updatedAt: false,
-  paranoid: true
+  paranoid: true,
+  indexes: [{type: 'SPATIAL', fields: [{ name:'geometria' }] }]
 })
-export class CodigoPostal extends Model<CodigoPostal> {
-  toJSON(): {id:number, poligono:object}{
-    return {
-      id: this.get('id'),
-      poligono: this.get('poligono')
-    }
-  }
+export class Distrito extends Model<Distrito> {
   @Column({
     type: DataType.INTEGER({ unsigned: true }),
     primaryKey: true,
@@ -22,9 +17,9 @@ export class CodigoPostal extends Model<CodigoPostal> {
   id: number;
 
   @Column({
-    type: 'POLYGON',
+    type: DataType.GEOMETRY('POLYGON', 4326),
     allowNull: false
   })
-  poligono: object
-}
+  geometria: object
 
+}
