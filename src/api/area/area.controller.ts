@@ -4,19 +4,21 @@ import { NextFunction, Response } from 'express';
 import { Graphicable } from '../../interfaces/graphicable.interface';
 import { Area } from '../../database/schema/Area.model';
 
+type Coordenadas = { latitude: number, longitude: number }
+
 @Controller('area')
 export class AreaController {
   constructor(private areaService: AreaService) {}
 
   @Get()
-  findAll(): Promise<number[]> {
+  findAll(): Promise<string[]> {
     return this.areaService.findAll();
   }
 
   @Get(':id')
   async findById(@Param('id') id: string, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
     try {
-      const area: Area = await this.areaService.findById(parseInt(id));
+      const area: Area = await this.areaService.findById(id);
       const response: Graphicable = {
         type: "Feature",
         geometry: area.get('geometria'),
@@ -40,7 +42,7 @@ export class AreaController {
   async updateArea(@Param('id') id: string, @Body() body: { geometria: object | string }, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
     try {
       const { geometria } = body;
-      const number = await this.areaService.updateArea(parseInt(id), geometria);
+      const number = await this.areaService.updateArea(id, geometria);
       res.status(204).send(number);
       return ;
     } catch (e) {
@@ -54,7 +56,7 @@ export class AreaController {
   }
 
   @Post()
-  async createArea(@Body() body: { id: number, geometria: object | string}, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
+  async createArea(@Body() body: { id: string, geometria: object | string}, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
     const { id, geometria } = body;
     try {
       await this.areaService.createArea(id, geometria);
@@ -67,7 +69,7 @@ export class AreaController {
   }
 
   @Post('find')
-  async findByCoordinates(@Body() body: { latitude: number, longitude: number }, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
+  async findByCoordinates(@Body() body: Coordenadas, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
     const { latitude, longitude } = body;
     try {
       const area = await this.areaService.findByLatLong(latitude, longitude);

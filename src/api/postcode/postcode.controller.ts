@@ -9,14 +9,14 @@ export class PostcodeController {
   constructor(private postcodeService: PostcodeService) {}
 
   @Get()
-  findAll(): Promise<number[]> {
+  findAll(): Promise<string[]> {
     return this.postcodeService.findAll();
   }
 
   @Get(':id')
   async findById(@Param('id') id: string, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
     try {
-      const postCode: PostCode = await this.postcodeService.findById(parseInt(id));
+      const postCode: PostCode = await this.postcodeService.findById(id);
       const response: Graphicable = {
         type: "Feature",
         geometry: postCode.get('geometria'),

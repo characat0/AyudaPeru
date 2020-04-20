@@ -9,14 +9,14 @@ export class DistritoController {
   constructor(private readonly distritoService: DistritoService) {}
 
   @Get()
-  findAll(): Promise<number[]> {
+  findAll(): Promise<string[]> {
     return this.distritoService.findAll();
   }
 
   @Get(':id')
   async findById(@Param('id') id: string, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
     try {
-      const distrito: Distrito = await this.distritoService.findById(parseInt(id));
+      const distrito: Distrito = await this.distritoService.findById(id);
       const response: Graphicable = {
         type: "Feature",
         geometry: distrito.get('geometria'),

@@ -10,11 +10,11 @@ export class DistritoService {
     this.notFoundError = new Error("Distrito not found.");
   }
 
-  async findAll(): Promise<number[]> {
+  async findAll(): Promise<string[]> {
     return (await Distrito.findAll({ attributes: ['id'] })).map(code => code.get('id'));
   }
 
-  findById(id: number): Promise<Distrito> {
+  findById(id: string): Promise<Distrito> {
     return Distrito.findByPk(id, { rejectOnEmpty: this.notFoundError });
   }
 

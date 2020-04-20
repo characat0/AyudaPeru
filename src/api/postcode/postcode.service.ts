@@ -10,11 +10,11 @@ export class PostcodeService {
     this.notFoundError = new Error("PostCode not found.");
   }
 
-  findAll(): Promise<number[]> {
+  findAll(): Promise<string[]> {
     return PostCode.findAll({ attributes: ['id'] }).map(code => code.get('id'));
   }
 
-  findById(id: number): Promise<PostCode> {
+  findById(id: string): Promise<PostCode> {
     return PostCode.findByPk(id, { rejectOnEmpty: this.notFoundError });
   }
 

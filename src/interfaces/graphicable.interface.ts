@@ -2,6 +2,6 @@ export interface Graphicable {
   type: 'Feature',
   geometry: object,
   properties: {
-    code?: number
+    code?: string
   }
 }

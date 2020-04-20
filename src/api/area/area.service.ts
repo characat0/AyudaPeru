@@ -14,11 +14,11 @@ export class AreaService {
     this.notAffectedRowsError = new Error("0 Area rows affected.");
   }
 
-  async findAll(): Promise<number[]> {
+  async findAll(): Promise<string[]> {
     return (await Distrito.findAll({ attributes: ['id'] })).map(distrito => distrito.get('id'));
   }
 
-  findById(id: number): Promise<Area> {
+  findById(id: string): Promise<Area> {
     return Area.findByPk(id, { rejectOnEmpty: this.notFoundError });
   }
 
@@ -38,7 +38,7 @@ export class AreaService {
     });
   }
 
-  async updateArea(id: number, geometria: string | object): Promise<number> {
+  async updateArea(id: string, geometria: string | object): Promise<number> {
     if (typeof geometria === 'object') {
       geometria = stringify(geometria);
     }
@@ -55,7 +55,7 @@ export class AreaService {
     });
   }
 
-  async createArea(id: number, geometria: string | object): Promise<void> {
+  async createArea(id: string, geometria: string | object): Promise<void> {
     if (typeof geometria === 'object') {
       geometria = stringify(geometria);
     }

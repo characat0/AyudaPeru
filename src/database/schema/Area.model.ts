@@ -9,11 +9,11 @@ import { Table, Column, Model, DataType } from 'sequelize-typescript';
 })
 export class Area extends Model<Area> {
   @Column({
-    type: DataType.INTEGER({ unsigned: true }),
+    type: DataType.STRING({ length: 10 }),
     primaryKey: true,
     allowNull: false
   })
-  id: number;
+  id: string;
 
   @Column({
     type: DataType.GEOMETRY('POLYGON', 4326),

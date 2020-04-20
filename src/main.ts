@@ -15,7 +15,6 @@ async function bootstrap() {
     .setTitle('AyudaPerú')
     .setDescription('Documentación de la API de AyudaPerú')
     .setVersion('1.0')
-    .addTag('Spatial API')
     .build();
 
   app.use(bodyParser.json({ limit: '50mb' }));
