@@ -49,7 +49,7 @@ export class PostcodeController {
           code: postCode.get('id')
         }
       }
-      res.json(response);
+      res.status(200).json(response);
       return response;
     } catch (e) {
       if (e.message === this.postcodeService.notFoundError.message) {

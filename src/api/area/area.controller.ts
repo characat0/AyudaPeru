@@ -79,7 +79,7 @@ export class AreaController {
           code: area.get('id')
         }
       }
-      res.json(response);
+      res.status(200).json(response);
       return response;
     } catch (e) {
       if (e.message === this.areaService.notFoundError.message) {
