@@ -1,4 +1,5 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Table({
   tableName: "area",
@@ -15,12 +16,14 @@ export class Area extends Model<Area> {
   })
   id: string;
 
+  @ApiProperty()
   @Column({
     type: DataType.GEOMETRY('POLYGON', 4326),
     allowNull: false
   })
   geometria: object
 
+  @ApiProperty({ required: false })
   @Column({
     type: DataType.JSON,
     allowNull: true

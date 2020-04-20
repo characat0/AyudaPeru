@@ -1,10 +1,9 @@
 import { Body, Controller, Delete, Get, Next, Param, Post, Put, Res } from '@nestjs/common';
 import { AreaService } from './area.service';
 import { NextFunction, Response } from 'express';
-import { Graphicable } from '../../interfaces/graphicable.interface';
 import { Area } from '../../database/schema/Area.model';
-
-type Coordenadas = { latitude: number, longitude: number }
+import { Graphic } from '../../database/models/graphic.model';
+import { Coordinate } from '../../database/models/coordinate.model';
 
 @Controller('area')
 export class AreaController {
@@ -16,10 +15,10 @@ export class AreaController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
+  async findById(@Param('id') id: string, @Res() res: Response, @Next() next: NextFunction): Promise<Graphic> {
     try {
       const area: Area = await this.areaService.findById(id);
-      const response: Graphicable = {
+      const response: Graphic = {
         type: "Feature",
         geometry: area.get('geometria'),
         properties: {
@@ -57,8 +56,8 @@ export class AreaController {
 
   @Post()
   async createArea(@Body() body: Area, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
-    const { id, geometria, propiedades } = body;
     try {
+      const { id, geometria, propiedades } = body;
       await this.areaService.createArea(id, geometria, propiedades);
       res.status(201).send();
       return;
@@ -69,11 +68,11 @@ export class AreaController {
   }
 
   @Post('find')
-  async findByCoordinates(@Body() body: Coordenadas, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
-    const { latitude, longitude } = body;
+  async findByCoordinates(@Body() body: Coordinate, @Res() res: Response, @Next() next: NextFunction): Promise<Graphic> {
     try {
+      const { latitude, longitude } = body;
       const area = await this.areaService.findByLatLong(latitude, longitude);
-      const response: Graphicable = {
+      const response: Graphic = {
         type: "Feature",
         geometry: area.get('geometria'),
         properties: {

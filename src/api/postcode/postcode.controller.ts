@@ -3,6 +3,7 @@ import { PostcodeService } from './postcode.service';
 import { NextFunction, Response } from 'express';
 import { PostCode } from '../../database/schema/PostCode.model';
 import { Graphicable } from '../../interfaces/graphicable.interface';
+import { Coordinate } from '../../database/models/coordinate.model';
 
 @Controller('postcode')
 export class PostcodeController {
@@ -37,7 +38,7 @@ export class PostcodeController {
   }
 
   @Post('find')
-  async findByCoordinates(@Body() body: { latitude: number, longitude: number }, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
+  async findByCoordinates(@Body() body: Coordinate, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
     try {
       const { latitude, longitude } = body;
       const postCode: PostCode = await this.postcodeService.findByLatLong(latitude, longitude);
