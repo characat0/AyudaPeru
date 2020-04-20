@@ -9,6 +9,7 @@ import { ApiProperty } from '@nestjs/swagger';
   indexes: [{type: 'SPATIAL', fields: [{ name:'geometria' }] }]
 })
 export class Area extends Model<Area> {
+  @ApiProperty({ required: false })
   @Column({
     type: DataType.STRING({ length: 10 }),
     primaryKey: true,
