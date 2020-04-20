@@ -13,12 +13,10 @@ sequelize.addModels([
   Area
 ]);
 
-export const databaseProviders = [
-  {
-    provide: sequelizeToken,
-    useFactory: async () => {
-      await sequelize.sync();
-      return sequelize;
-    }
+export const databaseProviders = {
+  provide: sequelizeToken,
+  useFactory: async () => {
+    await sequelize.sync();
+    return sequelize;
   }
-];
+};

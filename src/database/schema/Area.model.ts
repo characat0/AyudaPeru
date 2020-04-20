@@ -20,4 +20,10 @@ export class Area extends Model<Area> {
     allowNull: false
   })
   geometria: object
+
+  @Column({
+    type: DataType.JSON,
+    allowNull: true
+  })
+  propiedades?: object
 }

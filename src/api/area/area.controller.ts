@@ -39,7 +39,7 @@ export class AreaController {
   }
 
   @Put(':id')
-  async updateArea(@Param('id') id: string, @Body() body: { geometria: object | string }, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
+  async updateArea(@Param('id') id: string, @Body() body: Area, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
     try {
       const { geometria } = body;
       const number = await this.areaService.updateArea(id, geometria);
@@ -56,10 +56,10 @@ export class AreaController {
   }
 
   @Post()
-  async createArea(@Body() body: { id: string, geometria: object | string}, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
-    const { id, geometria } = body;
+  async createArea(@Body() body: Area, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
+    const { id, geometria, propiedades } = body;
     try {
-      await this.areaService.createArea(id, geometria);
+      await this.areaService.createArea(id, geometria, propiedades);
       res.status(201).send();
       return;
     } catch (e) {
