@@ -11,7 +11,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class Area extends Model<Area> {
   @ApiProperty({ required: false })
   @Column({
-    type: DataType.STRING({ length: 10 }),
+    type: DataType.UUID,
     primaryKey: true,
     allowNull: false
   })

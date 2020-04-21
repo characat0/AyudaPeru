@@ -55,16 +55,17 @@ export class AreaService {
     });
   }
 
-  async createArea(id: string, geometria: string | object, propiedades: object = null): Promise<void> {
+  async createArea(geometria: string | object, propiedades: object = null): Promise<Area> {
     if (typeof geometria === 'object') {
       geometria = stringify(geometria);
     }
     return this.sequelize.transaction(async transaction => {
       await this.sequelize.query(`SET @p=ST_POLYGONFROMTEXT(?);`,
         { replacements: [geometria], transaction });
-      await Area.create({ geometria: Sequelize.literal('@p'), id, propiedades },
+      const area = await Area.create({ geometria: Sequelize.literal('@p'), propiedades },
         { transaction });
       await this.sequelize.query(`SET @p=NULL;`, { transaction });
+      return area;
     });
   }
 

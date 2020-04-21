@@ -57,9 +57,9 @@ export class AreaController {
   @Post()
   async createArea(@Body() body: Area, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
     try {
-      const { id, geometria, propiedades } = body;
-      await this.areaService.createArea(id, geometria, propiedades);
-      res.status(201).send();
+      const { geometria, propiedades } = body;
+      const area = await this.areaService.createArea(geometria, propiedades);
+      res.status(201).send(area.get('id'));
       return;
     } catch (e) {
       next(e);
