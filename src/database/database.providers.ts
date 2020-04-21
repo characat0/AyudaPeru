@@ -16,7 +16,7 @@ sequelize.addModels([
 export const databaseProviders = {
   provide: sequelizeToken,
   useFactory: async () => {
-    await sequelize.sync();
+    await sequelize.authenticate();
     return sequelize;
   }
 };
