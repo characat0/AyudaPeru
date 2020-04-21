@@ -24,4 +24,15 @@ export class Distrito extends Model<Distrito> {
   })
   geometria: object
 
+  @Column({
+    type: DataType.STRING({ length: 40 }),
+    allowNull: false
+  })
+  nombre: string
+
+  @Column({
+    type: DataType.STRING({ length: 40 }),
+    allowNull: false
+  })
+  provincia: string
 }

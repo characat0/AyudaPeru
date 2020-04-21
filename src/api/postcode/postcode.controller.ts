@@ -3,7 +3,7 @@ import { PostcodeService } from './postcode.service';
 import { NextFunction, Response } from 'express';
 import { PostCode } from '../../database/schema/PostCode.model';
 import { Graphicable } from '../../interfaces/graphicable.interface';
-import { Coordinate } from '../../database/models/coordinate.model';
+import { Coordinate } from '../../database/models/Coordinate.model';
 
 @Controller('postcode')
 export class PostcodeController {

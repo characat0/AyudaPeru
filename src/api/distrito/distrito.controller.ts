@@ -3,8 +3,8 @@ import { DistritoService } from './distrito.service';
 import { NextFunction, Response } from 'express';
 import { Distrito } from '../../database/schema/Distrito.model';
 import { Graphicable } from '../../interfaces/graphicable.interface';
-import { Graphic } from '../../database/models/graphic.model';
-import { Coordinate } from '../../database/models/coordinate.model';
+import { Graphic } from '../../database/models/Graphic.model';
+import { Coordinate } from '../../database/models/Coordinate.model';
 
 @Controller('distrito')
 export class DistritoController {
@@ -23,7 +23,9 @@ export class DistritoController {
         type: "Feature",
         geometry: distrito.get('geometria'),
         properties: {
-          code: distrito.get('id')
+          code: distrito.get('id'),
+          nombre: distrito.get('nombre'),
+          provincia: distrito.get('provincia')
         }
       }
       res.json(response);
@@ -43,11 +45,14 @@ export class DistritoController {
     try {
       const { longitude, latitude } = body;
       const distrito: Distrito = await this.distritoService.findByLatLong(latitude, longitude);
+
       const response: Graphicable = {
         type: "Feature",
         geometry: distrito.get('geometria'),
         properties: {
-          code: distrito.get('id')
+          code: distrito.get('id'),
+          nombre: distrito.get('nombre'),
+          provincia: distrito.get('provincia')
         }
       }
       res.status(200).json(response);

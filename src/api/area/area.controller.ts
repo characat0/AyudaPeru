@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, Next, Param, Post, Put, Res } from '@nes
 import { AreaService } from './area.service';
 import { NextFunction, Response } from 'express';
 import { Area } from '../../database/schema/Area.model';
-import { Graphic } from '../../database/models/graphic.model';
-import { Coordinate } from '../../database/models/coordinate.model';
+import { Graphic } from '../../database/models/Graphic.model';
+import { Coordinate } from '../../database/models/Coordinate.model';
 
 @Controller('area')
 export class AreaController {
