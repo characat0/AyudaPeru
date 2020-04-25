@@ -1,6 +1,7 @@
 import { dialect } from "./constants";
 export const PORT: number = parseInt(process.env.PORT);
 export const DOC_PATH = process.env.DOC_PATH || 'api';
+export const JWT_SECRET = process.env.JWT_SECRET || 'SECRET';
 export const databaseConfig = {
   database: process.env.DATABASE_NAME,
   username: process.env.DATABASE_USERNAME,

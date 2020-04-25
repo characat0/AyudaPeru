@@ -5,6 +5,7 @@ import { PostCode } from '../../database/schema/PostCode.model';
 
 @Injectable()
 export class PostcodeService {
+  // Todo: cambiar a static los errores
   public readonly notFoundError: Error;
   constructor(@Inject(sequelizeToken) private readonly sequelize: Sequelize) {
     this.notFoundError = new Error("PostCode not found.");

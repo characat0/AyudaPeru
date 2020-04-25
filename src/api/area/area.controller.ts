@@ -1,9 +1,25 @@
-import { Body, Controller, Delete, Get, Next, Param, Post, Put, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Next,
+  Param,
+  Post,
+  Put,
+  Res,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AreaService } from './area.service';
 import { NextFunction, Response } from 'express';
 import { Area } from '../../database/schema/Area.model';
 import { Graphic } from '../../database/models/Graphic.model';
 import { Coordinate } from '../../database/models/Coordinate.model';
+import { TokenInterceptor } from '../../common/interceptors/token.interceptor';
+import { AuthGuard } from '../../common/guards/auth.guard';
 
 @Controller('area')
 export class AreaController {
@@ -15,55 +31,55 @@ export class AreaController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string, @Res() res: Response, @Next() next: NextFunction): Promise<Graphic> {
+  async findById(@Param('id') id: string): Promise<Graphic> {
     try {
       const area: Area = await this.areaService.findById(id);
-      const response: Graphic = {
+      return {
         type: "Feature",
         geometry: area.get('geometria'),
         properties: {
           code: area.get('id')
         }
-      }
-      res.json(response);
-      return response;
+      };
     } catch (e) {
-      if (e.message === this.areaService.notFoundError.message) {
-        res.status(404).send(e.message);
-        return ;
+      let exception = new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      if (e.message === AreaService.notFoundError.message) {
+        exception = new HttpException(e.message, HttpStatus.NOT_FOUND);
       }
-      next(e);
-      return;
+      throw exception;
     }
   }
 
+  @UseGuards(AuthGuard)
+  @UseInterceptors(TokenInterceptor)
   @Put(':id')
-  async updateArea(@Param('id') id: string, @Body() body: Area, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
+  async updateArea(@Param('id') id: string, @Body() body: Area, @Res() res: Response): Promise<void> {
     try {
       const { geometria } = body;
-      const number = await this.areaService.updateArea(id, geometria);
-      res.status(204).send(number);
+      await this.areaService.updateArea(id, geometria);
+      res.status(HttpStatus.NO_CONTENT).send();
       return ;
     } catch (e) {
-      if (e.message === this.areaService.notAffectedRowsError.message) {
-        res.status(404).send(e.message);
-        return ;
+      let exception = new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      if (e.message === AreaService.notAffectedRowsError.message) {
+        exception = new HttpException(e, HttpStatus.NOT_FOUND);
       }
-      next(e);
-      return;
+      throw exception;
     }
   }
 
+  @UseGuards(AuthGuard)
+  @UseInterceptors(TokenInterceptor)
   @Post()
-  async createArea(@Body() body: Area, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
+  async createArea(@Body() body: Area): Promise<any> {
     try {
       const { geometria, propiedades } = body;
       const area = await this.areaService.createArea(geometria, propiedades);
-      res.status(201).send(area.get('id'));
-      return;
+      return area.get('id');
+      //res.status(HttpStatus.CREATED).send(area.get('id'));
+      //return;
     } catch (e) {
-      next(e);
-      return;
+      throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -79,31 +95,29 @@ export class AreaController {
           code: area.get('id')
         }
       }
-      res.status(200).json(response);
+      res.status(HttpStatus.OK).json(response);
       return response;
     } catch (e) {
-      if (e.message === this.areaService.notFoundError.message) {
-        res.status(404).send(e.message);
-        return ;
+      let exception = new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      if (e.message === AreaService.notFoundError.message) {
+        exception = new HttpException(e, HttpStatus.NOT_FOUND);
       }
-      next(e);
-      return;
+      next(exception);
     }
   }
 
+  @UseGuards(AuthGuard)
+  @UseInterceptors(TokenInterceptor)
   @Delete(':id')
-  async deleteById(@Param('id') id: string, @Res() res: Response, @Next() next: NextFunction): Promise<void> {
+  async deleteById(@Param('id') id: string): Promise<number> {
     try {
-      const number = await this.areaService.deleteArea(parseInt(id));
-      res.status(200).send(number);
-      return ;
+      return await this.areaService.deleteArea(parseInt(id));
     } catch (e) {
-      if (e.message === this.areaService.notAffectedRowsError.message) {
-        res.status(404).send(e.message);
-        return ;
+      let exception = new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      if (e.message === AreaService.notAffectedRowsError.message) {
+        exception = new HttpException(e.message, HttpStatus.NOT_FOUND);
       }
-      next(e);
-      return ;
+      throw exception;
     }
   }
 }

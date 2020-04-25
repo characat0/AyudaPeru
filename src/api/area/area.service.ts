@@ -7,19 +7,16 @@ import { stringify } from 'wkt';
 
 @Injectable()
 export class AreaService {
-  public readonly notFoundError: Error;
-  public readonly notAffectedRowsError: Error;
-  constructor(@Inject(sequelizeToken) private readonly sequelize: Sequelize) {
-    this.notFoundError = new Error("Area not found.");
-    this.notAffectedRowsError = new Error("0 Area rows affected.");
-  }
+  public static readonly notFoundError: Error = new Error("Area not found.");
+  public static readonly notAffectedRowsError: Error = new Error("0 Area rows affected.");
+  constructor(@Inject(sequelizeToken) private readonly sequelize: Sequelize) {}
 
   async findAll(): Promise<string[]> {
     return (await Distrito.findAll({ attributes: ['id'] })).map(distrito => distrito.get('id'));
   }
 
   findById(id: string): Promise<Area> {
-    return Area.findByPk(id, { rejectOnEmpty: this.notFoundError });
+    return Area.findByPk(id, { rejectOnEmpty: AreaService.notFoundError });
   }
 
   async findByLatLong(latitude: number, longitude: number): Promise<Area> {
@@ -30,7 +27,7 @@ export class AreaService {
 
       const codigo: Area = await Area.findOne({
         where: Sequelize.literal(`ST_WITHIN(@point, geometria)`),
-        rejectOnEmpty: this.notFoundError,
+        rejectOnEmpty: AreaService.notFoundError,
         transaction
       });
       await this.sequelize.query(`SET @point=NULL`, { transaction });
@@ -49,7 +46,7 @@ export class AreaService {
         { where: { id }, fields: ['geometria'], transaction });
       await this.sequelize.query(`SET @p=NULL;`, { transaction });
       if (numero === 0) {
-        throw this.notAffectedRowsError;
+        throw AreaService.notAffectedRowsError;
       }
       return numero;
     });
@@ -72,7 +69,7 @@ export class AreaService {
   async deleteArea(id: number): Promise<number> {
     const numero = await Area.destroy({ where: { id }});
     if (numero === 0) {
-      throw this.notAffectedRowsError;
+      throw AreaService.notAffectedRowsError;
     }
     return numero;
   }

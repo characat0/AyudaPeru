@@ -1,4 +1,4 @@
-import { Graphicable } from '../../interfaces/graphicable.interface';
+import { Graphicable } from '../../common/interfaces/graphicable.interface';
 import { ApiResponseProperty } from '@nestjs/swagger';
 
 export class Graphic implements Graphicable{

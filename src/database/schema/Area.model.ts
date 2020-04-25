@@ -1,5 +1,6 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
+import { v1 } from 'uuid';
 
 @Table({
   tableName: "area",
@@ -13,7 +14,8 @@ export class Area extends Model<Area> {
   @Column({
     type: DataType.UUID,
     primaryKey: true,
-    allowNull: false
+    allowNull: false,
+    defaultValue: v1
   })
   id: string;
 

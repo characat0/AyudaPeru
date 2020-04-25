@@ -2,7 +2,7 @@ import { Body, Controller, Get, Next, Param, Post, Res } from '@nestjs/common';
 import { PostcodeService } from './postcode.service';
 import { NextFunction, Response } from 'express';
 import { PostCode } from '../../database/schema/PostCode.model';
-import { Graphicable } from '../../interfaces/graphicable.interface';
+import { Graphicable } from '../../common/interfaces/graphicable.interface';
 import { Coordinate } from '../../database/models/Coordinate.model';
 
 @Controller('postcode')

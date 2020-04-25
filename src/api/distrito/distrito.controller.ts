@@ -2,7 +2,7 @@ import { Body, Controller, Get, Next, Param, Post, Res } from '@nestjs/common';
 import { DistritoService } from './distrito.service';
 import { NextFunction, Response } from 'express';
 import { Distrito } from '../../database/schema/Distrito.model';
-import { Graphicable } from '../../interfaces/graphicable.interface';
+import { Graphicable } from '../../common/interfaces/graphicable.interface';
 import { Graphic } from '../../database/models/Graphic.model';
 import { Coordinate } from '../../database/models/Coordinate.model';
 
