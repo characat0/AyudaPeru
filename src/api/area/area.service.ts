@@ -69,7 +69,7 @@ export class AreaService {
     });
   }
 
-  async deleteArea(id: number): Promise<number> {
+  async deleteArea(id: string): Promise<number> {
     const numero = await Area.destroy({ where: { id }});
     if (numero === 0) {
       throw AreaService.notAffectedRowsError;

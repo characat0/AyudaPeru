@@ -110,7 +110,7 @@ export class AreaController {
   @Delete(':id')
   async deleteById(@Param('id') id: string): Promise<number> {
     try {
-      return await this.areaService.deleteArea(parseInt(id));
+      return await this.areaService.deleteArea(id);
     } catch (e) {
       let exception = new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
       if (e.message === AreaService.notAffectedRowsError.message) {
