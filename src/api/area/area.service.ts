@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { sequelizeToken } from '../../constants';
 import { Sequelize } from 'sequelize-typescript';
-import { Distrito } from '../../database/schema/Distrito.model';
 import { Area } from '../../database/schema/Area.model';
 import { stringify } from 'wkt';
 
@@ -11,8 +10,12 @@ export class AreaService {
   public static readonly notAffectedRowsError: Error = new Error("0 Area rows affected.");
   constructor(@Inject(sequelizeToken) private readonly sequelize: Sequelize) {}
 
-  async findAll(): Promise<string[]> {
-    return (await Distrito.findAll({ attributes: ['id'] })).map(distrito => distrito.get('id'));
+  findAll(): Promise<Area[]> {
+    return Area.findAll();
+  }
+
+  async findAllIds(): Promise<string[]> {
+    return (await Area.findAll({ attributes: ['id'] })).map(area => area.get('id'));
   }
 
   findById(id: string): Promise<Area> {

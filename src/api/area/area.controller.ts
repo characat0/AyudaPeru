@@ -1,33 +1,38 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpException,
-  HttpStatus,
-  Next,
-  Param,
-  Post,
-  Put,
-  Res,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
 import { AreaService } from './area.service';
-import { NextFunction, Response } from 'express';
+import { Response } from 'express';
 import { Area } from '../../database/schema/Area.model';
 import { Graphic } from '../../database/models/Graphic.model';
 import { Coordinate } from '../../database/models/Coordinate.model';
-import { TokenInterceptor } from '../../common/interceptors/token.interceptor';
-import { AuthGuard } from '../../common/guards/auth.guard';
 
 @Controller('area')
 export class AreaController {
   constructor(private areaService: AreaService) {}
-
   @Get()
-  findAll(): Promise<string[]> {
-    return this.areaService.findAll();
+  async findAll(): Promise<{type: string, features: Graphic[]}> {
+    try {
+      const areas: Graphic[] = (await this.areaService.findAll()).map(area => {
+        return {
+          type: "Feature",
+          geometry: area.get('geometria'),
+          properties: {
+            code: area.get('id')
+          }
+        };
+      });
+      return {
+        type: "FeatureCollection",
+        features: areas
+      }
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+  }
+  // Todo: rehabilitar este metodo debido a la ineficiencia.
+  //@Get()
+  findAllIds(): Promise<string[]> {
+    return this.areaService.findAllIds();
   }
 
   @Get(':id')
