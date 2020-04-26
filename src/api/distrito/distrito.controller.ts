@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Next, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { DistritoService } from './distrito.service';
-import { NextFunction, Response } from 'express';
+import { Response } from 'express';
 import { Distrito } from '../../database/schema/Distrito.model';
 import { Graphicable } from '../../common/interfaces/graphicable.interface';
 import { Graphic } from '../../database/models/Graphic.model';
@@ -16,7 +16,7 @@ export class DistritoController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string, @Res() res: Response, @Next() next: NextFunction): Promise<Graphic> {
+  async findById(@Param('id') id: string): Promise<Graphic> {
     try {
       const distrito: Distrito = await this.distritoService.findById(id);
       const response: Graphicable = {
@@ -28,20 +28,18 @@ export class DistritoController {
           provincia: distrito.get('provincia')
         }
       }
-      res.json(response);
       return response;
     } catch (e) {
-      if (e.message === this.distritoService.notFoundError.message) {
-        res.status(404).send(e.message);
-        return ;
+      let exception = new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      if (e.message === DistritoService.notFoundError.message) {
+        exception = new HttpException(e.message, HttpStatus.NOT_FOUND);
       }
-      next(e);
-      return;
+      throw exception;
     }
   }
 
   @Post('find')
-  async findByCoordinates(@Body() body: Coordinate, @Res() res: Response, @Next() next: NextFunction): Promise<Graphicable> {
+  async findByCoordinates(@Body() body: Coordinate, @Res() res: Response): Promise<Graphicable> {
     try {
       const { longitude, latitude } = body;
       const distrito: Distrito = await this.distritoService.findByLatLong(latitude, longitude);
@@ -58,12 +56,11 @@ export class DistritoController {
       res.status(200).json(response);
       return response;
     } catch (e) {
-      if (e.message === this.distritoService.notFoundError.message) {
-        res.status(404).send(e.message);
-        return ;
+      let exception = new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      if (e.message === DistritoService.notFoundError.message) {
+        exception = new HttpException(e.message, HttpStatus.NOT_FOUND);
       }
-      next(e);
-      return;
+      throw exception;
     }
   }
 }

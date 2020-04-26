@@ -12,9 +12,7 @@ export class LoginController {
       const { email, password } = body;
       const valid = await this.loginService.login({ email, password });
       if (valid) {
-        const token = await this.loginService.getJwt({ email });
-        console.log(token);
-        return token;
+        return await this.loginService.getJwt({ email });
       }
     } catch (e) {
       if (e.message === CredencialService.invalidCredentialError.message) {

@@ -32,8 +32,8 @@ export class AuthService {
     return this.jwtService.sign({ email, state: newState, id })
   }
 
-  verifyJwt(jwt: string) {
-    return this.jwtService.verify(jwt);
+  verifyJwt(jwt: string): Promise<object> {
+    return this.jwtService.verify<object>(jwt);
   }
 
   async verifyState(credential: Contactable) {

@@ -57,7 +57,6 @@ export class Usuario extends Model<Usuario> {
     allowNull: true,
     validate: {
       isSexoValido(value) {
-        console.log(value);
         if (value !== null) {
           value = value.toUpperCase();
           if (value !== 'M' && value !== 'F') {

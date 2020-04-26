@@ -16,7 +16,6 @@ export class TokenInterceptor implements NestInterceptor {
       .handle()
       .pipe(map(async v => {
         const token = await this.authService.getNewToken(credentials);
-        console.log(v);
         return ({ data: v, newToken: token })
       }));
   }

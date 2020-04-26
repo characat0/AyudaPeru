@@ -8,8 +8,6 @@ import { AuthGuard } from '../../common/guards/auth.guard';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @UseGuards(AuthGuard)
-  @UseInterceptors(TokenInterceptor)
   @Get('me')
   async getOwnInfo(@Body() body: { credentials: Contactable }) {
     try {

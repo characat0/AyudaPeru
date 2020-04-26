@@ -84,7 +84,7 @@ export class AreaController {
   }
 
   @Post('find')
-  async findByCoordinates(@Body() body: Coordinate, @Res() res: Response, @Next() next: NextFunction): Promise<Graphic> {
+  async findByCoordinates(@Body() body: Coordinate, @Res() res: Response): Promise<Graphic> {
     try {
       const { latitude, longitude } = body;
       const area = await this.areaService.findByLatLong(latitude, longitude);
@@ -102,7 +102,7 @@ export class AreaController {
       if (e.message === AreaService.notFoundError.message) {
         exception = new HttpException(e, HttpStatus.NOT_FOUND);
       }
-      next(exception);
+      throw exception;
     }
   }
 
