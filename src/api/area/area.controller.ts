@@ -50,8 +50,6 @@ export class AreaController {
     }
   }
 
-  @UseGuards(AuthGuard)
-  @UseInterceptors(TokenInterceptor)
   @Put(':id')
   async updateArea(@Param('id') id: string, @Body() body: Area, @Res() res: Response): Promise<void> {
     try {
@@ -68,8 +66,6 @@ export class AreaController {
     }
   }
 
-  @UseGuards(AuthGuard)
-  @UseInterceptors(TokenInterceptor)
   @Post()
   async createArea(@Body() body: Area): Promise<any> {
     try {
@@ -106,8 +102,6 @@ export class AreaController {
     }
   }
 
-  @UseGuards(AuthGuard)
-  @UseInterceptors(TokenInterceptor)
   @Delete(':id')
   async deleteById(@Param('id') id: string): Promise<number> {
     try {
