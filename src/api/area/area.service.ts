@@ -38,14 +38,17 @@ export class AreaService {
     });
   }
 
-  async updateArea(id: string, geometria: string | object, propiedades: object): Promise<number> {
+  async updateArea(id: string, body: Area): Promise<number> {
+    let { geometria } = body;
     if (typeof geometria === 'object') {
       geometria = stringify(geometria);
     }
+    delete body.geometria;
+    delete body.id;
     return this.sequelize.transaction(async transaction => {
       await this.sequelize.query(`SET @p=ST_POLYGONFROMTEXT(?);`,
         { replacements: [geometria], transaction });
-      const [ numero ] = await Area.update({ geometria: Sequelize.literal('@p'), propiedades },
+      const [ numero ] = await Area.update({ geometria: Sequelize.literal('@p'), ...body },
         { where: { id }, fields: ['geometria'], transaction });
       await this.sequelize.query(`SET @p=NULL;`, { transaction });
       if (numero === 0) {
