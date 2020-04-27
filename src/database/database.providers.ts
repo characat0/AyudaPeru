@@ -7,6 +7,7 @@ import { Area } from './schema/Area.model';
 import { Credencial } from './schema/Credencial.model';
 import { Usuario } from './schema/Usuario.model';
 import { genSalt, hash } from 'bcryptjs';
+import { RefreshToken } from './schema/RefreshToken.model';
 
 const sequelize = new Sequelize(databaseConfig);
 sequelize.addModels([
@@ -14,7 +15,8 @@ sequelize.addModels([
   PostCode,
   Area,
   Credencial,
-  Usuario
+  Usuario,
+  RefreshToken
 ]);
 
 Credencial.beforeCreate('hashPassword', async (credencial) => {
@@ -36,11 +38,14 @@ Usuario.beforeValidate('acomodaSexo', (usuario) => {
 Credencial.hasOne(Usuario, { foreignKey: { name: 'id' }});
 Usuario.belongsTo(Credencial, { foreignKey: { name: 'id' }});
 
+Credencial.hasMany(RefreshToken, { foreignKey: { name: 'credencial_id' }});
+RefreshToken.belongsTo(Credencial, { foreignKey: { name: 'credencial_id' }});
+
 
 export const databaseProviders = {
   provide: sequelizeToken,
   useFactory: async () => {
-    await sequelize.authenticate();
+    await sequelize.sync();
     return sequelize;
   }
 };

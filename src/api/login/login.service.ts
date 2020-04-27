@@ -14,4 +14,11 @@ export class LoginService {
     return this.authService.getJwt(email);
   }
 
+  createRefreshToken(credencialId: string) {
+    return this.authService.createRefreshToken(credencialId);
+  }
+
+  getAccessToken(credencialId: string) {
+    return this.authService.getNewAccessToken(credencialId);
+  }
 }

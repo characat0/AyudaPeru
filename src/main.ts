@@ -1,11 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
-import { PORT, DOC_PATH } from './config';
+import { PORT, DOC_PATH, CERT_FOLDER, PROTOCOL } from './config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as fs from "fs";
+import { INestApplication } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  let app: INestApplication;
+  if (PROTOCOL === "HTTPS") {
+    const httpsOptions = {
+      key: fs.readFileSync(`/etc/letsencrypt/live/${CERT_FOLDER}/privkey.pem`),
+      cert: fs.readFileSync(`/etc/letsencrypt/live/${CERT_FOLDER}/fullchain.pem`),
+      ca: fs.readFileSync(`/etc/letsencrypt/live/${CERT_FOLDER}/chain.pem`)
+    }
+    app = await NestFactory.create(AppModule, { httpsOptions });
+  } else {
+    app = await NestFactory.create(AppModule);
+  }
+
   app.enableCors({
       origin: "*",
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",

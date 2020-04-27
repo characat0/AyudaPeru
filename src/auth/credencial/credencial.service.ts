@@ -10,13 +10,16 @@ export class CredencialService {
   static readonly alreadyVerifiedError: Error = new Error("Credencial already verified.");
   static readonly notAffectedRowsError: Error = new Error("0 Credential rows affected.");
 
-  async validate(credencial: { email: string, password: string }): Promise<boolean> {
+  async validate(credencial: { email: string, password: string }): Promise<Credencial> {
     const { email, password } = credencial;
     const credencial1 = await Credencial.findOne({ where: { email }, rejectOnEmpty: CredencialService.notFoundError });
     if (!credencial1.get('verified')) {
       throw CredencialService.notVerifiedError;
     }
-    return credencial1.checkPassword(password);
+    if (await credencial1.checkPassword(password)) {
+      return credencial1;
+    }
+    throw CredencialService.invalidCredentialError;
   }
 
   async create(credencial: { email: string, password: string }): Promise<string> {

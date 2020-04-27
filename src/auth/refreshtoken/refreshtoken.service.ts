@@ -22,7 +22,7 @@ export class RefreshtokenService {
   }
 
   getById(id: string) {
-    return RefreshToken.findByPk(id, { rejectOnEmpty: RefreshtokenService.notFoundError});
+    return RefreshToken.findByPk(id, { rejectOnEmpty: RefreshtokenService.notFoundError });
   }
 
   updateExpiration(id: string, expiration: Date) {

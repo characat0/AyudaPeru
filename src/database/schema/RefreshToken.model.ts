@@ -11,7 +11,7 @@ import { v1 } from 'uuid';
   updatedAt: false,
   paranoid: true,
   indexes: [
-    { fields: [ { name: 'credencialId' } ] }
+    { fields: [ { name: 'credencial_id' } ] }
   ]
 })
 export class RefreshToken extends Model<RefreshToken> {
@@ -39,7 +39,7 @@ export class RefreshToken extends Model<RefreshToken> {
   @Column({
     type: DataType.DATE,
     allowNull: false,
-    defaultValue: new Date(Date.now())
+    defaultValue: () => new Date(Date.now())
   })
   expires: Date;
 

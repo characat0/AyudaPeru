@@ -11,7 +11,7 @@ export class BearerMiddleware implements NestMiddleware {
     const [ type, token ] = authorization.split(' ');
     if (token && type === 'Bearer') {
       try {
-        req.body.credentials = await this.jwtService.verify(token);
+        req.body.credentials = await this.jwtService.verify<{id: string}>(token);
       } catch (e) {}
     }
     next();

@@ -19,3 +19,5 @@ export const databaseConfig = {
     evict: parseInt(process.env.DATABASE_EVICT_TIME)
   }
 };
+export const CERT_FOLDER = process.env.CERT_FOLDER;
+export const PROTOCOL = process.env.PROTOCOL || "HTTP";

@@ -13,9 +13,10 @@ import { JwtModule } from './auth/jwt/jwt.module';
 import { CredencialModule } from './auth/credencial/credencial.module';
 import { VerifyModule } from './api/verify/verify.module';
 import { UsersModule } from './api/users/users.module';
+import { TokenModule } from './api/token/token.module';
 
 @Module({
-  imports: [DatabaseModule, PostcodeModule, DistritoModule, AreaModule, LoginModule, SignupModule, AuthModule, JwtModule, CredencialModule, VerifyModule, UsersModule],
+  imports: [DatabaseModule, PostcodeModule, DistritoModule, AreaModule, LoginModule, SignupModule, AuthModule, JwtModule, CredencialModule, VerifyModule, UsersModule, TokenModule],
   controllers: [AppController],
   providers: [AppService],
 })

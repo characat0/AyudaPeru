@@ -7,12 +7,12 @@ import { RefreshtokenService } from './refreshtoken/refreshtoken.service';
 @Injectable()
 export class AuthService {
   public static notMatchingStatesError: Error = new Error("States do not match.");
-  private static refreshTokenExpiration: number = 60*60*24;
-  private static accessTokenExpiration: number = 60*10;
+  public static readonly refreshTokenExpiration: number = 60*60*24;
+  public static readonly accessTokenExpiration: number = 60*10;
 
   constructor(private credencialService: CredencialService, private jwtService: JwtService, private refreshtokenService: RefreshtokenService) {}
 
-  validateCredentials(credentials: { email: string, password: string }): Promise<boolean> {
+  validateCredentials(credentials: { email: string, password: string }) {
     return this.credencialService.validate(credentials);
   }
 
@@ -51,13 +51,28 @@ export class AuthService {
     return this.verifyEmail(email);
   }
 
-  async verifyRefreshToken(jwt: string) {
-    const token: { id: string, state: string, credencialId: string } = await this.jwtService.verify(jwt);
+  async createRefreshToken(credencialId: string) {
+    const date = new Date(Date.now() + (AuthService.refreshTokenExpiration * 1000));
+    const token = await this.refreshtokenService.createToken(credencialId, date);
+    const state = token.get('state');
+    const id = token.get('id');
+    return this.jwtService.sign({ id, state, credencialId }, AuthService.refreshTokenExpiration);
+  }
+
+  async verifyRefreshToken(token: { id: string, state: string, credencialId: string }) {
     const trueToken = await this.refreshtokenService.getById(token.id);
     return trueToken.get('state') === token.state;
   }
 
+  async decodeRefreshToken(jwt: string) {
+    return this.jwtService.verify<{ id: string, state: string, credencialId: string }>(jwt);
+  }
+
   async getNewRefreshToken(token: { id: string, state: string, credencialId: string }) {
+    const matching = await this.verifyRefreshToken(token);
+    if (!matching) {
+      throw AuthService.notMatchingStatesError;
+    }
     const { id, credencialId } = token;
 /*    const trueToken = await this.refreshtokenService.getById(id);
     const trueState = trueToken.get('state');
@@ -70,8 +85,8 @@ export class AuthService {
     return this.jwtService.sign({ id, credencialId, state: newState }, AuthService.refreshTokenExpiration);
   }
 
-  async getNewAccessToken(token: { id: string, state: string, credencialId: string }) {
-    const { id } = token;
+  async getNewAccessToken(credencialId: string) {
+    const id = credencialId;
     return await this.jwtService.sign({ id }, AuthService.accessTokenExpiration);
   }
 }
