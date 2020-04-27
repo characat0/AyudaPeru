@@ -66,9 +66,9 @@ export class AreaController {
       res.status(HttpStatus.NO_CONTENT).send();
       return ;
     } catch (e) {
-      let exception = new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      let exception = new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
       if (e.message === AreaService.notAffectedRowsError.message) {
-        exception = new HttpException(e, HttpStatus.NOT_FOUND);
+        exception = new HttpException(e.message, HttpStatus.NOT_FOUND);
       }
       throw exception;
     }
@@ -83,7 +83,7 @@ export class AreaController {
       //res.status(HttpStatus.CREATED).send(area.get('id'));
       //return;
     } catch (e) {
-      throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -104,9 +104,9 @@ export class AreaController {
       res.status(HttpStatus.OK).json(response);
       return response;
     } catch (e) {
-      let exception = new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      let exception = new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
       if (e.message === AreaService.notFoundError.message) {
-        exception = new HttpException(e, HttpStatus.NOT_FOUND);
+        exception = new HttpException(e.message, HttpStatus.NOT_FOUND);
       }
       throw exception;
     }
