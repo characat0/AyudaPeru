@@ -2,7 +2,8 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
 import { compare } from 'bcryptjs';
 import { v1 } from 'uuid';
 import { Usuario } from './Usuario.model';
-import { HasOneGetAssociationMixin } from 'sequelize';
+import { HasManyGetAssociationsMixin, HasOneGetAssociationMixin } from 'sequelize';
+import { RefreshToken } from './RefreshToken.model';
 
 @Table({
   tableName: 'credencial',
@@ -47,18 +48,13 @@ export class Credencial extends Model<Credencial> {
   })
   verified: boolean
 
-  @Column({
-    type: DataType.STRING({ length: 36 }),
-    allowNull: false,
-    defaultValue: v1
-  })
-  state: string
-
   public readonly updatedAt!: Date;
 
   readonly usuario?: Usuario;
 
   public getUsuario!: HasOneGetAssociationMixin<Usuario>;
+
+  public getRefreshTokens!: HasManyGetAssociationsMixin<RefreshToken>;
 
   public readonly createdAt!: Date;
 

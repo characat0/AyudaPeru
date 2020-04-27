@@ -57,7 +57,7 @@ export class AreaService {
       await this.sequelize.query(`SET @p=ST_POLYGONFROMTEXT(?);`,
         { replacements: [geometria], transaction });
       const [ numero ] = await Area.update({ geometria: Sequelize.literal('@p'), ...body },
-        { where: { id }, fields: ['geometria'], transaction });
+        { where: { id }, transaction });
       await this.sequelize.query(`SET @p=NULL;`, { transaction });
       if (numero === 0) {
         throw AreaService.notAffectedRowsError;

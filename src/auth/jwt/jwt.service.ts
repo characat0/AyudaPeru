@@ -6,10 +6,11 @@ import { JWT_SECRET } from '../../config';
 export class JwtService {
   public static invalidDecodedPayloadError: Error = new Error("Decoded payload is not an object.");
   public static tokenExpiredError: Error = new Error("Token expired.");
-
-  public sign(payload: string | object | Buffer): Promise<string> {
+  private readonly expiration = 600;
+  public sign(payload: string | object | Buffer, expiration?: number): Promise<string> {
+    expiration = expiration || this.expiration;
     return new Promise((resolve, reject) => {
-      sign(payload, JWT_SECRET, { expiresIn: 600 }, (err, encoded) => {
+      sign(payload, JWT_SECRET, { expiresIn: expiration }, (err, encoded) => {
         if (err) return reject(err);
         return resolve(encoded);
       });

@@ -21,7 +21,7 @@ export class CredencialService {
 
   async create(credencial: { email: string, password: string }): Promise<string> {
     const { email, password } = credencial;
-    const credencial1 = await Credencial.create({  email, password });
+    const credencial1 = await Credencial.create({ email, password });
     return credencial1.get('id');
   }
 
@@ -45,7 +45,7 @@ export class CredencialService {
   async getState(email: string): Promise<{ state: string, id: string }> {
     const credencial = await Credencial.findOne({ where: { email }, attributes: ['state', 'id'], rejectOnEmpty: CredencialService.notFoundError });
     return {
-      state: credencial.get('state'),
+      state: "",
       id: credencial.get('id')
     };
   }
