@@ -12,11 +12,13 @@ export class AreaController {
   async findAll(): Promise<{type: string, features: Graphic[]}> {
     try {
       const areas: Graphic[] = (await this.areaService.findAll()).map(area => {
+        const props = area.get('propiedades');
         return {
           type: "Feature",
           geometry: area.get('geometria'),
           properties: {
-            code: area.get('id')
+            code: area.get('id'),
+            ...props
           }
         };
       });
@@ -39,11 +41,13 @@ export class AreaController {
   async findById(@Param('id') id: string): Promise<Graphic> {
     try {
       const area: Area = await this.areaService.findById(id);
+      const props = area.get('propiedades');
       return {
         type: "Feature",
         geometry: area.get('geometria'),
         properties: {
-          code: area.get('id')
+          code: area.get('id'),
+          ...props
         }
       };
     } catch (e) {
@@ -89,11 +93,13 @@ export class AreaController {
     try {
       const { latitude, longitude } = body;
       const area = await this.areaService.findByLatLong(latitude, longitude);
+      const props = area.get('propiedades');
       const response: Graphic = {
         type: "Feature",
         geometry: area.get('geometria'),
         properties: {
-          code: area.get('id')
+          code: area.get('id'),
+          ...props
         }
       }
       res.status(HttpStatus.OK).json(response);
