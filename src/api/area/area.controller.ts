@@ -62,8 +62,8 @@ export class AreaController {
   @Put(':id')
   async updateArea(@Param('id') id: string, @Body() body: Area, @Res() res: Response): Promise<void> {
     try {
-      const { geometria } = body;
-      await this.areaService.updateArea(id, geometria);
+      const { geometria, propiedades } = body;
+      await this.areaService.updateArea(id, geometria, propiedades);
       res.status(HttpStatus.NO_CONTENT).send();
       return ;
     } catch (e) {
