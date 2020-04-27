@@ -39,12 +39,20 @@ export class AreaService {
   }
 
   async updateArea(id: string, body: Area): Promise<number> {
+    delete body.id;
     let { geometria } = body;
+    if (!geometria) {
+      const [ numero ] = await Area.update(body, { where: { id }});
+      if (numero === 0) {
+        throw AreaService.notAffectedRowsError;
+      }
+      return numero;
+    }
     if (typeof geometria === 'object') {
       geometria = stringify(geometria);
     }
     delete body.geometria;
-    delete body.id;
+
     return this.sequelize.transaction(async transaction => {
       await this.sequelize.query(`SET @p=ST_POLYGONFROMTEXT(?);`,
         { replacements: [geometria], transaction });
