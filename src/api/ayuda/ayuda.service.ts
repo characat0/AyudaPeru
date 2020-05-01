@@ -12,25 +12,25 @@ export class AyudaService {
   }
 
   async getAll() {
-    return Ayuda.findAll({ attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt' ] }});
+    return Ayuda.findAll({ attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt' ] } });
   }
 
   async findNotFinished() {
     const now = new Date(Date.now());
-    return Ayuda.findAll({ where: { finish: { [Op.gt] : now } } });
+    return Ayuda.findAll({ where: { finish: { [Op.gt] : now } }, attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt' ] } });
   }
 
   async findActive() {
     const now = new Date(Date.now());
-    return Ayuda.findAll({ where: { finish: {[Op.gt]: now}, start: {[Op.lt]: now}} });
+    return Ayuda.findAll({ where: { finish: {[Op.gt]: now}, start: {[Op.lt]: now}}, attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt' ] } });
   }
 
   async findById(id: string) {
-    return Ayuda.findByPk(id, { rejectOnEmpty: AyudaService.notFoundError});
+    return Ayuda.findByPk(id, { rejectOnEmpty: AyudaService.notFoundError, attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt' ] } });
   }
 
   async findByUser(usuarioId: string) {
-    return Ayuda.findAll({ where: { usuarioId }});
+    return Ayuda.findAll({ where: { usuarioId }, attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt' ] } });
   }
 
   async deleteById(id: string) {
@@ -39,7 +39,7 @@ export class AyudaService {
   }
 
   async findByArea(areaId: string) {
-    return Ayuda.findAll({ where: { areaId }});
+    return Ayuda.findAll({ where: { areaId }, attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt' ] } });
   }
 
   async updateById(id: string, body: Ayuda) {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { AyudaService } from './ayuda.service';
 import { Ayuda } from '../../database/schema/Ayuda.model';
 
@@ -6,8 +6,9 @@ import { Ayuda } from '../../database/schema/Ayuda.model';
 export class AyudaController {
   constructor(private ayudaService: AyudaService) {}
   @Get()
-  async getAllAyuda() {
-    return this.ayudaService.getAll();
+  async get(@Query('area') areaId: string) {
+    if (!areaId) return this.ayudaService.getAll();
+    return this.ayudaService.findByArea(areaId);
   }
 
   @Get('active')
@@ -48,6 +49,6 @@ export class AyudaController {
       }
       throw exception;
     }
-
   }
+
 }
