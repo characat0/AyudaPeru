@@ -12,7 +12,7 @@ export class AyudaService {
   }
 
   async getAll() {
-    return Ayuda.findAll();
+    return Ayuda.findAll({ attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt' ] }});
   }
 
   async findNotFinished() {
