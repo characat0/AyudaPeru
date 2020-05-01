@@ -7,7 +7,8 @@ import { v1 } from 'uuid';
   underscored: true,
   timestamps: true,
   paranoid: true,
-  indexes: [{type: 'SPATIAL', fields: [{ name:'geometria' }] }]
+  hasTrigger: true,
+  indexes: [{ type: 'SPATIAL', fields: [{ name:'geometria' }] }]
 })
 export class Area extends Model<Area> {
   @ApiProperty({ required: false })

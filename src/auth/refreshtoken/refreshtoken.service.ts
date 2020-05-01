@@ -14,6 +14,7 @@ export class RefreshtokenService {
     if (number === 0) {
       throw RefreshtokenService.notAffectedRowsError;
     }
+    await RefreshToken.increment({ uses: 1 }, { where: { id }});
     return uuid;
   }
 
@@ -25,7 +26,4 @@ export class RefreshtokenService {
     return RefreshToken.findByPk(id, { rejectOnEmpty: RefreshtokenService.notFoundError });
   }
 
-  updateExpiration(id: string, expiration: Date) {
-
-  }
 }

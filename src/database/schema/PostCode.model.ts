@@ -7,7 +7,9 @@ import { ApiProperty } from '@nestjs/swagger';
   timestamps: true,
   updatedAt: false,
   paranoid: true,
-  indexes: [{type: 'SPATIAL', fields: [{ name:'geometria' }] }]
+  indexes: [
+    {type: 'SPATIAL', fields: [{ name:'geometria' }] }
+    ]
 })
 export class PostCode extends Model<PostCode> {
   @Column({

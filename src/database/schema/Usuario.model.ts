@@ -17,7 +17,7 @@ export class Usuario extends Model<Usuario> {
     primaryKey: true,
     allowNull: false
   })
-  id: string
+  id: string;
 
   @Column({
     type: DataType.STRING,
@@ -26,7 +26,7 @@ export class Usuario extends Model<Usuario> {
       isAlpha: true
     }
   })
-  nombres: string
+  nombres: string;
 
   @Column({
     type: DataType.STRING,
@@ -35,7 +35,7 @@ export class Usuario extends Model<Usuario> {
       isAlpha: true
     }
   })
-  apellidos: string
+  apellidos: string;
 
   @Column({
     type: DataType.DATE,
@@ -50,7 +50,7 @@ export class Usuario extends Model<Usuario> {
       }
     }
   })
-  fechaNacimiento: Date
+  fechaNacimiento: Date;
 
   @Column({
     type: DataType.STRING({ length: 1 }),
@@ -67,7 +67,7 @@ export class Usuario extends Model<Usuario> {
       }
     }
   })
-  sexo: Sexo
+  sexo: Sexo;
 
   @Column({
     type: DataType.BLOB({ length: 'medium' }),

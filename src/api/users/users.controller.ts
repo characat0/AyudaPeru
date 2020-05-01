@@ -1,8 +1,6 @@
-import { Body, Controller, Get, HttpException, HttpStatus, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { Contactable } from '../../common/interfaces/contactable.interface';
 import { UsersService } from './users.service';
-import { TokenInterceptor } from '../../common/interceptors/token.interceptor';
-import { AuthGuard } from '../../common/guards/auth.guard';
 
 @Controller('users')
 export class UsersController {

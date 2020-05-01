@@ -48,8 +48,6 @@ export class Credencial extends Model<Credencial> {
   })
   verified: boolean
 
-  public readonly updatedAt!: Date;
-
   readonly usuario?: Usuario;
 
   public getUsuario!: HasOneGetAssociationMixin<Usuario>;
@@ -57,6 +55,8 @@ export class Credencial extends Model<Credencial> {
   public getRefreshTokens!: HasManyGetAssociationsMixin<RefreshToken>;
 
   public readonly createdAt!: Date;
+
+  public readonly updatedAt!: Date;
 
   public readonly deletedAt!: Date;
 }

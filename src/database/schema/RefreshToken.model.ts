@@ -11,7 +11,7 @@ import { v1 } from 'uuid';
   updatedAt: false,
   paranoid: true,
   indexes: [
-    { fields: [ { name: 'credencial_id' } ] }
+    { unique: false, fields: [ { name: 'credencial_id' } ] }
   ]
 })
 export class RefreshToken extends Model<RefreshToken> {
@@ -29,6 +29,13 @@ export class RefreshToken extends Model<RefreshToken> {
     defaultValue: v1
   })
   state: string;
+
+  @Column({
+    type: DataType.SMALLINT({ unsigned: true }),
+    allowNull: false,
+    defaultValue: 0
+  })
+  uses: number;
 
   @Column({
     type: DataType.UUID,

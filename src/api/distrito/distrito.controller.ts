@@ -3,7 +3,6 @@ import { DistritoService } from './distrito.service';
 import { Response } from 'express';
 import { Distrito } from '../../database/schema/Distrito.model';
 import { Graphicable } from '../../common/interfaces/graphicable.interface';
-import { Graphic } from '../../database/models/Graphic.model';
 import { Coordinate } from '../../database/models/Coordinate.model';
 
 @Controller('distrito')
@@ -16,10 +15,10 @@ export class DistritoController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string): Promise<Graphic> {
+  async findById(@Param('id') id: string): Promise<Graphicable> {
     try {
       const distrito: Distrito = await this.distritoService.findById(id);
-      const response: Graphicable = {
+      return {
         type: "Feature",
         geometry: distrito.get('geometria'),
         properties: {
@@ -27,8 +26,7 @@ export class DistritoController {
           nombre: distrito.get('nombre'),
           provincia: distrito.get('provincia')
         }
-      }
-      return response;
+      };
     } catch (e) {
       let exception = new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
       if (e.message === DistritoService.notFoundError.message) {

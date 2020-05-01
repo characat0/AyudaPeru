@@ -8,6 +8,9 @@ import { Credencial } from './schema/Credencial.model';
 import { Usuario } from './schema/Usuario.model';
 import { genSalt, hash } from 'bcryptjs';
 import { RefreshToken } from './schema/RefreshToken.model';
+import { DistritoArea } from './schema/DistritoArea.model';
+import { Ayuda } from './schema/Ayuda.model';
+import { FactoryProvider } from '@nestjs/common';
 
 const sequelize = new Sequelize(databaseConfig);
 sequelize.addModels([
@@ -16,7 +19,9 @@ sequelize.addModels([
   Area,
   Credencial,
   Usuario,
-  RefreshToken
+  RefreshToken,
+  DistritoArea,
+  Ayuda
 ]);
 
 Credencial.beforeCreate('hashPassword', async (credencial) => {
@@ -38,11 +43,16 @@ Usuario.beforeValidate('acomodaSexo', (usuario) => {
 Credencial.hasOne(Usuario, { foreignKey: { name: 'id' }});
 Usuario.belongsTo(Credencial, { foreignKey: { name: 'id' }});
 
-Credencial.hasMany(RefreshToken, { foreignKey: { name: 'credencial_id' }});
-RefreshToken.belongsTo(Credencial, { foreignKey: { name: 'credencial_id' }});
+Credencial.hasMany(RefreshToken, { foreignKey: { name: 'credencialId' }});
+RefreshToken.belongsTo(Credencial, { foreignKey: { name: 'credencialId' }});
 
+Area.belongsToMany(Distrito, { through: DistritoArea, foreignKey: { name: 'areaId' } });
+Distrito.belongsToMany(Area, { through: DistritoArea, foreignKey: { name: 'distritoId' } });
 
-export const databaseProviders = {
+Ayuda.belongsTo(Usuario, { foreignKey: { name: 'usuarioId' }});
+Ayuda.belongsTo(Area, { foreignKey: { name: 'areaId' }});
+
+export const databaseProvider: FactoryProvider = {
   provide: sequelizeToken,
   useFactory: async () => {
     await sequelize.sync();
