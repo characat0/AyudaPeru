@@ -6,6 +6,8 @@ import { Usuario } from '../../database/schema/Usuario.model';
 @Injectable()
 export class AyudaService {
   static readonly notFoundError: Error = new Error("Ayuda not found.");
+  static readonly ayudaAttributes = { exclude: ['updatedAt', 'createdAt', 'deletedAt', 'usuarioId', 'verified'] };
+  static readonly ayudaInclude = [{model: Usuario, attributes: ['nombres', 'apellidos'] }];
 
   async create(body: Ayuda) {
     delete body.id;
@@ -14,42 +16,44 @@ export class AyudaService {
 
   async getAll() {
     return Ayuda.findAll({
-      attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt', 'usuarioId' ] },
-      include: [{ model: Usuario, attributes: { exclude:  ['updatedAt', 'createdAt', 'deletedAt', 'id' ] }}]
+      where: { verified: true },
+      attributes: AyudaService.ayudaAttributes,
+      include: AyudaService.ayudaInclude
     });
   }
 
   async findNotFinished() {
     const now = new Date(Date.now());
     return Ayuda.findAll({
-      where: { finish: { [Op.gt] : now } },
-      attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt', 'usuarioId' ] },
-      include: [{ model: Usuario, attributes: { exclude:  ['updatedAt', 'createdAt', 'deletedAt', 'id' ] }}]
+      where: { finish: { [Op.gt] : now }, verified: true },
+      attributes: AyudaService.ayudaAttributes,
+      include: AyudaService.ayudaInclude
     });
   }
 
   async findActive() {
     const now = new Date(Date.now());
     return Ayuda.findAll({
-      where: { finish: {[Op.gt]: now}, start: {[Op.lt]: now}},
-      attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt', 'usuarioId' ] },
-      include: [{ model: Usuario, attributes: { exclude:  ['updatedAt', 'createdAt', 'deletedAt', 'id' ] }}]
+      where: { finish: {[Op.gt]: now}, start: {[Op.lt]: now}, verified: true },
+      attributes: AyudaService.ayudaAttributes,
+      include: AyudaService.ayudaInclude
     });
   }
 
   async findById(id: string) {
-    return Ayuda.findByPk(id, {
+    return Ayuda.findOne({
+      where: { id, verified: true },
       rejectOnEmpty: AyudaService.notFoundError,
-      attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt', 'usuarioId' ] },
-      include: [{ model: Usuario, attributes: { exclude:  ['updatedAt', 'createdAt', 'deletedAt', 'id' ] }}]
+      attributes: AyudaService.ayudaAttributes,
+      include: AyudaService.ayudaInclude
     });
   }
 
   async findByUser(usuarioId: string) {
     return Ayuda.findAll({
       where: { usuarioId },
-      attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt', 'usuarioId' ] },
-      include: [{ model: Usuario, attributes: { exclude:  ['updatedAt', 'createdAt', 'deletedAt', 'id' ] }}]
+      attributes: AyudaService.ayudaAttributes,
+      include: AyudaService.ayudaInclude
     });
   }
 
@@ -61,8 +65,8 @@ export class AyudaService {
   async findByArea(areaId: string) {
     return Ayuda.findAll({
       where: { areaId },
-      attributes: { exclude: ['updatedAt', 'createdAt', 'deletedAt', 'usuarioId' ] },
-      include: [{ model: Usuario, attributes: { exclude:  ['updatedAt', 'createdAt', 'deletedAt', 'id' ] }}]
+      attributes: AyudaService.ayudaAttributes,
+      include: AyudaService.ayudaInclude
     });
   }
 
