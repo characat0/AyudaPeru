@@ -38,7 +38,7 @@ export class Usuario extends Model<Usuario> {
   apellidos: string;
 
   @Column({
-    type: DataType.DATE,
+    type: DataType.DATEONLY,
     allowNull: true,
     validate: {
       isLaterThanNow(value) {
