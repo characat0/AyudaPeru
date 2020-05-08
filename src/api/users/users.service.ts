@@ -16,4 +16,8 @@ export class UsersService {
   createUsuario(data: object) {
     return Usuario.create(data);
   }
+
+  example() {
+    Usuario.findAll()
+  }
 }

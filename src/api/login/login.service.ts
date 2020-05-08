@@ -9,11 +9,6 @@ export class LoginService {
     return this.authService.validateCredentials(credenciales);
   }
 
-  getJwt(credenciales: { email: string }) {
-    const { email } = credenciales
-    return this.authService.getJwt(email);
-  }
-
   createRefreshToken(credencialId: string) {
     return this.authService.createRefreshToken(credencialId);
   }

@@ -11,6 +11,7 @@ import { RefreshToken } from './schema/RefreshToken.model';
 import { DistritoArea } from './schema/DistritoArea.model';
 import { Ayuda } from './schema/Ayuda.model';
 import { FactoryProvider } from '@nestjs/common';
+import { Comentario } from './schema/Comentario.model';
 
 const sequelize = new Sequelize(databaseConfig);
 sequelize.addModels([
@@ -21,7 +22,8 @@ sequelize.addModels([
   Usuario,
   RefreshToken,
   DistritoArea,
-  Ayuda
+  Ayuda,
+  Comentario
 ]);
 
 Credencial.beforeCreate('hashPassword', async (credencial) => {
@@ -52,10 +54,16 @@ Distrito.belongsToMany(Area, { through: DistritoArea, foreignKey: { name: 'distr
 Ayuda.belongsTo(Usuario, { foreignKey: { name: 'usuarioId' }});
 Ayuda.belongsTo(Area, { foreignKey: { name: 'areaId' }});
 
+Usuario.hasMany(Comentario, { foreignKey: 'usuarioId' });
+Area.hasMany(Comentario, { foreignKey: 'areaId' });
+
+Comentario.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+Comentario.belongsTo(Area, { foreignKey: 'areaId' });
+
 export const databaseProvider: FactoryProvider = {
   provide: sequelizeToken,
   useFactory: async () => {
-    ENV === "prod" ? await sequelize.authenticate() : await sequelize.sync();
+    ENV === 'prod' ? await sequelize.authenticate() : await sequelize.sync();
     return sequelize;
   }
 };

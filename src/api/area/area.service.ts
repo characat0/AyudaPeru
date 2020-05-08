@@ -3,6 +3,8 @@ import { sequelizeToken } from '../../constants';
 import { Sequelize } from 'sequelize-typescript';
 import { Area } from '../../database/schema/Area.model';
 import { stringify } from 'wkt';
+import { Comentario } from '../../database/schema/Comentario.model';
+import { Usuario } from '../../database/schema/Usuario.model';
 
 @Injectable()
 export class AreaService {
@@ -11,15 +13,38 @@ export class AreaService {
   constructor(@Inject(sequelizeToken) private readonly sequelize: Sequelize) {}
 
   findAll(): Promise<Area[]> {
-    return Area.findAll();
+    return Area.findAll({
+      include: [
+        {
+          model: Comentario,
+          attributes: ['texto', 'createdAt'],
+          include: [
+            { model: Usuario, attributes: Usuario.publicFields }
+            ]
+        }
+      ]
+    });
   }
 
   async findAllIds(): Promise<string[]> {
-    return (await Area.findAll({ attributes: ['id'] })).map(area => area.get('id'));
+    return (await Area.findAll({
+      attributes: ['id']
+    })).map(area => area.get('id'));
   }
 
   findById(id: string): Promise<Area> {
-    return Area.findByPk(id, { rejectOnEmpty: AreaService.notFoundError });
+    return Area.findByPk(id, {
+      rejectOnEmpty: AreaService.notFoundError,
+      include: [
+        {
+          model: Comentario,
+          attributes: ['texto', 'createdAt'],
+          include: [
+            { model: Usuario, attributes: Usuario.publicFields }
+          ]
+        }
+      ]
+    });
   }
 
   async findByLatLong(latitude: number, longitude: number): Promise<Area> {

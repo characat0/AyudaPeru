@@ -52,5 +52,5 @@ export class RefreshToken extends Model<RefreshToken> {
 
   public readonly createdAt!: Date;
   public getCredencial!: BelongsToGetAssociationMixin<Credencial>;
-  readonly credencial?: Credencial;
+  readonly Credencial?: Credencial;
 }

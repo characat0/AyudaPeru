@@ -48,7 +48,7 @@ export class Credencial extends Model<Credencial> {
   })
   verified: boolean
 
-  readonly usuario?: Usuario;
+  readonly Usuario?: Usuario;
 
   public getUsuario!: HasOneGetAssociationMixin<Usuario>;
 

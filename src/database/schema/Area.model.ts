@@ -1,6 +1,7 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { v1 } from 'uuid';
+import { Comentario } from './Comentario.model';
 
 @Table({
   tableName: "area",
@@ -32,5 +33,7 @@ export class Area extends Model<Area> {
     type: DataType.JSON,
     allowNull: true
   })
-  propiedades?: object
+  propiedades?: object;
+
+  public readonly Comentarios?: Comentario[];
 }

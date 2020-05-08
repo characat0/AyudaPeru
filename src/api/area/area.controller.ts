@@ -18,7 +18,8 @@ export class AreaController {
           geometry: area.get('geometria'),
           properties: {
             code: area.get('id'),
-            ...props
+            ...props,
+            comentarios: area.Comentarios
           }
         };
       });
@@ -47,7 +48,8 @@ export class AreaController {
         geometry: area.get('geometria'),
         properties: {
           code: area.get('id'),
-          ...props
+          ...props,
+          comentarios: area.Comentarios
         }
       };
     } catch (e) {

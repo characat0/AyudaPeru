@@ -11,6 +11,7 @@ type Sexo = null | 'M' | 'F';
 export class Usuario extends Model<Usuario> {
   static readonly notBinarySexError: Error = new Error("El campo sexo solo puede tomar valor M o F.");
   static readonly notYoungerThanNowError: Error = new Error("La fecha de nacimiento no puede ser mayor que ahora.");
+  static readonly publicFields = ['nombres', 'apellidos'];
 
   @Column({
     type: DataType.UUID,

@@ -16,15 +16,6 @@ export class AuthService {
     return this.credencialService.validate(credentials);
   }
 
-  verifyEmail(email: string) {
-    return this.credencialService.verifyEmail(email);
-  }
-
-  async getJwt(email: string) {
-    const { state, id } = await this.credencialService.getState(email);
-    return this.jwtService.sign({ email, state, id });
-  }
-
   async getNewToken(credential: Contactable): Promise<string> {
     const { email, state } = credential;
     const { state: trueState, id } = await this.credencialService.getState(email);
@@ -41,10 +32,10 @@ export class AuthService {
     return trueState === state;
   }
 
-  async verifyFromId(id: string) {
+  async verifyEmailById(id: string) {
     const credencial = await this.credencialService.getFromId(id);
     const email = credencial.get('email');
-    return this.verifyEmail(email);
+    return this.credencialService.verifyEmail(email);
   }
 
   async createRefreshToken(credencialId: string) {

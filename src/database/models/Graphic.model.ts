@@ -8,6 +8,7 @@ export class Graphic implements Graphicable{
   readonly geometry: object
   @ApiResponseProperty()
   readonly properties: {
-    code?: string
+    code?: string,
+    [p: string]: any
   }
 }
